@@ -15,7 +15,7 @@ http://qcp.qq.com
 http://font-spider.org
 https://github.com/egoo-wh/egoo
 https://note.youdao.com/signIn/index.html?&callback=https%3A%2F%2Fnote.youdao.com%2Fweb%2F%23%2Ffile%2FWEBaf8c67
-https://lol.qq.com/cguide/Guide/Base/FECommon.html#整体通用规范
+https://lol.qq.com/cguide/Guide/Base/FECommon.html#鏁翠綋閫氱敤瑙勮寖
 https://www.toptal.com/developers/css/sprite-generator
 https://ossweb-img.qq.com/images/js/dom2img/demo/index.html
 http://www.lrcgc.com/diy
