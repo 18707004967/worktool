@@ -27,3 +27,52 @@ https://study.163.com/course/courseLearn.htm?courseId=1004938024#/learn/video?le
 https://study.miaov.com  
 https://study.miaov.com/study/show/chapter/83#117  
 https://wenda.so.com/q/1461186827723935  
+
+function BrowserType()
+{
+var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 ; //判断是否IE浏览器
+var isEdge = userAgent.indexOf("Edge") > -1; //判断是否IE的Edge浏览器
+var isFF = userAgent.indexOf("Firefox") > -1; //判断是否Firefox浏览器
+
+if (isIE)
+{
+var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
+reIE.test(userAgent);
+var fIEVersion = parseFloat(RegExp["$1"]);
+if(fIEVersion == 7)
+    { return "IE7";}
+    else if(fIEVersion == 8)
+    { return "IE8";}
+    else if(fIEVersion == 9)
+    { return "IE9";}
+    else if(fIEVersion == 10)
+    { return "IE10";}
+    else if(fIEVersion == 11)
+    { return "IE11";}
+    else
+    { return "0"}//IE版本过低
+    }//isIE end
+    if (isEdge) { return "Edge";}
+    if (isFF) { return "Firefox";}
+}
+var ll = BrowserType();
+function onResize(){
+    var ww= window.innerWidth;
+    var hh= window.innerHeight;
+    var zoom2 = ww<1400? 1400:ww;
+    if(zoom2>=1920){
+      zoom2 = 1920;
+    }
+    if(ll!=='Firefox'){
+        $('.wrap_inner').css({'zoom':(zoom2/1920).toFixed(2)})
+    }else{
+      $('.wrap_inner').css('transform','scale('+(zoom2/1920).toFixed(2)+')')
+      $('.wrap_inner').css('-webkit-transform','scale('+(zoom2/1920).toFixed(2)+')')
+      $('.wrap_inner').css('-ms-transform','scale('+(zoom2/1920).toFixed(2)+')')
+    }
+    $('.wrap').css('height',(zoom2/1920).toFixed(2)*4020)
+    
+}
+onResize();
+window.onresize = onResize;
