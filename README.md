@@ -28,6 +28,8 @@ https://study.miaov.com
 https://study.miaov.com/study/show/chapter/83#117  
 https://wenda.so.com/q/1461186827723935  
 
+···
+//整体缩小 兼容到ie9
 function BrowserType()
 {
 var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
@@ -76,3 +78,4 @@ function onResize(){
 }
 onResize();
 window.onresize = onResize;
+···
