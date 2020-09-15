@@ -29,53 +29,60 @@ https://study.miaov.com/study/show/chapter/83#117
 https://wenda.so.com/q/1461186827723935  
 
 ```
-  //整体缩小 兼容到ie9
-  function BrowserType()
-  {
-  var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
-  var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 ; //判断是否IE浏览器
-  var isEdge = userAgent.indexOf("Edge") > -1; //判断是否IE的Edge浏览器
-  var isFF = userAgent.indexOf("Firefox") > -1; //判断是否Firefox浏览器
-
-  if (isIE)
-  {
-  var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
-  reIE.test(userAgent);
-  var fIEVersion = parseFloat(RegExp["$1"]);
-  if(fIEVersion == 7)
-      { return "IE7";}
-      else if(fIEVersion == 8)
-      { return "IE8";}
-      else if(fIEVersion == 9)
-      { return "IE9";}
-      else if(fIEVersion == 10)
-      { return "IE10";}
-      else if(fIEVersion == 11)
-      { return "IE11";}
-      else
-      { return "0"}//IE版本过低
-      }//isIE end
-      if (isEdge) { return "Edge";}
-      if (isFF) { return "Firefox";}
+// 屏幕自适应
+var adaptViewport = (function () {
+  function detectIE() {
+    var ua = window.navigator.userAgent;
+    var msie = ua.match(/MSIE (\d+)/g);
+    if (msie != null) {
+      return parseInt(msie[0].match(/\d+/g)[0]);
+    }
+    // IE 11
+    var trident = ua.indexOf('Trident/');
+    if (trident > 0) {
+      var rv = ua.indexOf('rv:');
+      return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+    }
+    return false;
   }
-  var ll = BrowserType();
-  function onResize(){
-      var ww= window.innerWidth;
-      var hh= window.innerHeight;
-      var zoom2 = ww<1400? 1400:ww;
-      if(zoom2>=1920){
-        zoom2 = 1920;
+  var minWidth = 1380; // 最小宽度
+  var designWidth = 1920; // 设计稿宽度
+  var isFirefox = navigator.userAgent.indexOf("Firefox") != -1
+  var ieVersion = detectIE();
+  var zoom = 1;
+  function resize(){
+    // doc.clientWidth不包含滚动栏宽度
+    var ww = document.documentElement.clientWidth || window.innerWidth;
+    var realWid = Math.max(ww, minWidth);
+    zoom = realWid/designWidth;
+    if (ieVersion && ieVersion < 9) { return; }
+    // firefox不支持zoom. ie9,10,11 zoom表现奇怪
+    if (isFirefox || ieVersion >= 9) {
+      if (zoom !== 1) {
+        if (!$('.wrap').parent().hasClass('wrap-scale')) {
+          $('.wrap').wrap('<div class="wrap-scale"></div>')
+          $('.wrap-scale').css('position', 'relative');
+          $('.wrap').data('originHeight', $('.wrap').outerHeight())
+        }
+        var transformOrigin = '0% 0%';
+        $('.wrap').css({'width': designWidth,'transform':'scale('+zoom+')', 'transform-origin': transformOrigin, 'margin-left': 0})
+        $('.wrap-scale').css({'width': (realWid > minWidth ? 'auto' : minWidth), 'height': $('.wrap').data('originHeight')*zoom, 'overflow': 'hidden'})
       }
-      if(ll!=='Firefox'){
-          $('.wrap_inner').css({'zoom':(zoom2/1920).toFixed(2)})
-      }else{
-        $('.wrap_inner').css('transform','scale('+(zoom2/1920).toFixed(2)+')')
-        $('.wrap_inner').css('-webkit-transform','scale('+(zoom2/1920).toFixed(2)+')')
-        $('.wrap_inner').css('-ms-transform','scale('+(zoom2/1920).toFixed(2)+')')
-      }
-      $('.wrap').css('height',(zoom2/1920).toFixed(2)*4020)
-
+    } else {
+      $('.wrap').css({'width': designWidth, 'zoom': zoom});
+    }
   }
-  onResize();
-  window.onresize = onResize;
+  resize();
+  window.onresize = resize;
+  // 当切换tab等情形导致.wrap高度改变时，调用此函数。
+  function resizeWrapScale() {
+    $('.wrap-scale').css({'height': $('.wrap').outerHeight()*zoom})
+  }
+  return { zoom: zoom, resizeWrapScale: resizeWrapScale}
+})();
+```
+```
+  (function() {
+  if(/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)){var a=document.referrer,b={"baidu.com":"seo_baidu","sogou.com":"seo_sogou","sm.cn":"seo_sm","so.com":"seo_360","bing.com":"seo_bing","google.com":"seo_google"},c;for(c in b){if(-1!=a.indexOf(c)){a=b[c];if(window.sessionStorage){sessionStorage.setItem("channel",a)}else{var d=d||0,b="";0!=d&&(b=new Date,b.setTime(b.getTime()+1000*d),b="; expires="+b.toGMTString());document.cookie="channel="+escape(a)+b+"; path=/"}break}}window.location.href="https://dnf.qq.com/cp/a20200618fightmanm/index.html"+location.search};
+  })();
 ```
